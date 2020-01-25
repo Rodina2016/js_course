@@ -1,23 +1,14 @@
 let num = 266219;
 let res = 1;
-let strLenght = String(num).length;
+let strNum = String(num);
+let strLenght = strNum.length;
 
-for(let i = 1; i <= strLenght; i++) {
-    res = res * i;
+for(let i = 0; i < strLenght; i++) {
+    res = res * strNum[i];
 }
 
 console.log(res);
 
-function pow(x, n) {
-    let result = x;
-  
-    for (let i = 1; i < n; i++) {
-      result *= x;
-    }
-  
-    return result;
-  }
+res = String(res**3);
 
-res = String(pow(res, 3));
-
-console.log(res.substr(0, 2));
+console.log(res.substring(0, 2));
