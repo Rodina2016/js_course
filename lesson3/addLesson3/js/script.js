@@ -1,3 +1,5 @@
+'use strict'
+
 let lang = prompt('Введите язык');
 
 if(lang === 'ru') {
