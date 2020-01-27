@@ -15,10 +15,8 @@ console.log(typeof(deposit));
 console.log(addExpenses.length);
 let str = addExpenses.toLowerCase();
 addExpenses = str.split(',');
+console.log(addExpenses);
 let budgetMonth = amount1 + amount2;
-for(let i = 0; i < addExpenses.length; i++) {
-    budgetMonth += 1*(addExpenses[i]);
-}
 let month = Math.ceil(mission/(money - budgetMonth));
 let budgetDay =  Math.floor((money - budgetMonth)/30);
 
