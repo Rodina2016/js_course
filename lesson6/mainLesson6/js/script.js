@@ -1,0 +1,24 @@
+
+function bot(x) {
+    let number = prompt('Угадай число от 1 до 100');
+    return function() {
+        if(+number > x) {
+            alert('Загаданное число меньше');
+            let start = bot(x);
+            start();
+        } else if (+number < x) {
+            alert('Загаданное число больше');
+            let start = bot(x);
+            start();
+        } else if(isNaN(+number)){
+            alert('Введи число!');
+            let start = bot(x);
+            start();
+        } else if (+number === x) {
+            alert('Верно');
+        }
+    }
+}
+
+let start = bot(40);
+start();
