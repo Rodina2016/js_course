@@ -32,7 +32,7 @@ function bot(x, tryCount) {
                 if(confirm('Попытки закончились, хотите сыграть еще?')){
                     let start = bot(random(),10);
                     start(0);
-                } else {
+                }else {
                     return;
                 }
                 
@@ -41,7 +41,7 @@ function bot(x, tryCount) {
     }
 }
 
-function random() {
+function random(){
     return Math.floor(Math.random()*100);
 }
 
