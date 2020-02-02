@@ -46,6 +46,5 @@ function random(){
 }
 
 let x = random();
-
 let start = bot(x,10);
 start(0);
