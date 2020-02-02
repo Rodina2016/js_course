@@ -1,50 +1,24 @@
-
 'use strict';
 
-function bot(x, tryCount) {
-    let number = prompt('Угадай число от 1 до 100');
-    console.log(x);
+let week = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
 
-    return function(count) {
-        if(number === null){
-            return;
-        }else {
-            count++;
-            if(tryCount > count){
-                if(+number > x) {
-                    count++;
-                    alert('Загаданное число меньше, осталось ' + (tryCount - count) + 'попыток');
-                    let start = bot(x,tryCount);
-                    start(count);
-                } else if (+number < x) {
-                    alert('Загаданное число больше, осталось ' + (tryCount - count) + 'попыток');
-                    let start = bot(x,tryCount);
-                    start(count);
-                } else if(isNaN(+number)){
-                    alert('Введите число, осталось ' + (tryCount - count) + 'попыток');
-                    let start = bot(x,tryCount);
-                    start(count);
-                } else if (+number === x) {
-                    alert('Поздравляю, Вы угадали!!! Хотели бы сыграть еще?');
-                    start(0);
-                }
-            } else {
-                if(confirm('Попытки закончились, хотите сыграть еще?')){
-                    let start = bot(random(),10);
-                    start(0);
-                }else {
-                    return;
-                }
-                
-            }
+let day = new Date().getDay();
+console.log(day);
+
+for (let item in week) {
+    console.log(item);
+    if(week[item] === 'Суббота' || week[item] === 'Воскресенье') {
+        if(+item === day) {
+            document.write("<strong><i>"+week[item]+"</i></strong><br>");
+        } else {
+            document.write("<i>"+week[item]+"</i><br>");
+        }
+    } else {
+        if(+item === day) {
+        document.write("<strong>"+week[item]+"</strong><br>");
+        } else {
+            document.write(week[item]+"<br>");
         }
     }
-}
 
-function random(){
-    return Math.floor(Math.random()*100);
 }
-
-let x = random();
-let start = bot(x,10);
-start(0);
