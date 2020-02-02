@@ -25,5 +25,6 @@ function bot(x) {
     }
 }
 
-let start = bot(40);
+let x = Math.floor(Math.random()*100);
+let start = bot(x);
 start();
