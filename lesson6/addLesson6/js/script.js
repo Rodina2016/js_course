@@ -3,6 +3,7 @@
 
 function bot(x, tryCount) {
     let number = prompt('Угадай число от 1 до 100');
+    console.log(x);
 
     return function(count) {
         if(number === null){
@@ -29,7 +30,7 @@ function bot(x, tryCount) {
                 }
             } else {
                 if(confirm('Попытки закончились, хотите сыграть еще?')){
-                    let start = bot(40,5);
+                    let start = bot(random(),10);
                     start(0);
                 }else {
                     return;
@@ -40,5 +41,11 @@ function bot(x, tryCount) {
     }
 }
 
-let start = bot(40,5);
+function random(){
+    return Math.floor(Math.random()*100);
+}
+
+let x = random();
+
+let start = bot(x,10);
 start(0);
