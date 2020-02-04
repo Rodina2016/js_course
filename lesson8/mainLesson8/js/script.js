@@ -115,3 +115,16 @@ for(item in appData) {
 appData.getInfoDeposit();
 
 console.log(appData.percentDeposit, appData.moneyDeposit, appData.calcSaveMoney());
+
+let addExpensesArr = appData.addExpenses;
+let newArrAddExpreses = [];
+ for( item in addExpensesArr) {
+     let elem = addExpensesArr[item].trim();
+     let firstLetter = elem[0].toUpperCase();
+     let newWord = firstLetter + elem.substring(1);
+     newArrAddExpreses.push(newWord);
+ }
+
+let newSrting = newArrAddExpreses.join(', ');
+
+console.log(newSrting);
