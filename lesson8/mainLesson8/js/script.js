@@ -1,9 +1,7 @@
 let money;
 
 function start() {
-    do {
-        money = prompt('Ваш месячный доход', 45000);
-    } while (!letIsNumber(money));
+    money = myPrompt('Ваш месячный доход', 45000, 'number');
 }
 
 start();
@@ -24,15 +22,8 @@ let appData = {
     expensesMonth: 0,
     asking: function () {
         if(confirm('Есть ли у вас доп. зароботок?')) {
-            let ItemIncome = '';
-            do{
-                ItemIncome = prompt('Какой у ва дополнительный зароботок?', 'Таксую');
-            } while (ItemIncome === '' || !isNaN(+ItemIncome));
-
-            let cashIncome = 0;
-            do {
-                cashIncome = prompt('Сколько в месяц зарабатываете на этом?', 10000);
-            } while(cashIncome === '' || !letIsNumber(+cashIncome));
+            let ItemIncome = myPrompt('Какой у ваc дополнительный зароботок?', 'Таксую', 'string');
+            let cashIncome = myPrompt('Сколько в месяц зарабатываете на этом?', 10000, 'number');
 
             appData.income[ItemIncome] = cashIncome;
         }
@@ -46,14 +37,8 @@ let appData = {
         let expensesRes = '';
     
         for(let i =0; i < 2; i++) {
-            do {
-                expensesRes = prompt('Введите обязательную статью расходов?', 'Учеба');
-            } while (expensesRes === '' || !isNaN(+expensesRes));
-
-            do {
-                howMatch = prompt('Во сколько это обойдется?', 15000);
-            } while (howMatch === '' || !letIsNumber(+howMatch));
-
+            expensesRes = myPrompt('Введите обязательную статью расходов?', 'Учеба', 'string');
+            howMatch = myPrompt('Во сколько это обойдется?', 15000, 'number');
             this.expenses[expensesRes] = howMatch;
         }
 
@@ -89,13 +74,10 @@ let appData = {
     },
     getInfoDeposit: function () {
         if(appData.deposit) {
-            do {
-                appData.percentDeposit = prompt('Какой годовой процент?','10');
-            } while (appData.percentDeposit === '' || !letIsNumber(+appData.percentDeposit));
 
-            do {
-                appData.moneyDeposit = prompt('Какая сумма заложена?',10000);
-            } while (appData.moneyDeposit === '' || !letIsNumber(+appData.moneyDeposit));
+            appData.percentDeposit = myPrompt('Какой годовой процент?','10', 'number');
+            appData.moneyDeposit = myPrompt('Какая сумма заложена?',10000, 'number');
+
         }
     },
     calcSaveMoney: function () {
@@ -112,6 +94,17 @@ appData.getStatusIncome();
 
 function letIsNumber(n) {
     return !isNaN(parseFloat(n))  && isFinite(n);
+}
+
+function myPrompt (text, defaultValue, type) {
+    let res;
+    let sing = '';
+
+    do {
+        res = prompt(text, defaultValue);
+    } while(res === '' || (sing = type === 'number' ? !letIsNumber(+res) : letIsNumber(+res)));
+
+    return res;
 }
 
 console.log('Наша программа включает в себя данные:');
