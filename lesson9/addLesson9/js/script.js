@@ -1,24 +1,67 @@
 'use strict';
 
-let week = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+setInterval(function () {
+    let day = new Date();
+    const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'long',
+        timezone: 'UTC',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    };
 
-let day = new Date().getDay();
-console.log(day);
+    let stringDay = day.toLocaleDateString("ru", options);
+    stringDay = stringDay.replace('г.', 'года');
+    let arrDay = stringDay.split(' ');
+    let arrTime = arrDay[5].split(':');
 
-for (let item in week) {
-    console.log(item);
-    if(week[item] === 'Суббота' || week[item] === 'Воскресенье') {
-        if(+item === day) {
-            document.write("<strong><i>"+week[item]+"</i></strong><br>");
-        } else {
-            document.write("<i>"+week[item]+"</i><br>");
+    arrTime.map(function (elem, ind) {
+        if (+elem[0] === 0) {
+            arrTime[ind] = elem[1];
         }
-    } else {
-        if(+item === day) {
-        document.write("<strong>"+week[item]+"</strong><br>");
+    });
+
+    let hour = changeDeclension(arrTime[0], 'час');
+    let minutes = changeDeclension(arrTime[1], 'минута');
+    let sec = changeDeclension(arrTime[2], 'секунда');
+    let newTimeString = hour + ' ' + minutes + ' ' + sec;
+    arrDay.splice(5, 6, newTimeString);
+
+    newTimeString = 'Сегодня ' + arrDay.join(' ');
+
+    console.log(newTimeString);
+
+    function changeDeclension(number, type) {
+        let nameType = [];
+
+        switch (type) {
+            case 'час' :
+                nameType.push(' час');
+                nameType.push(' часа');
+                nameType.push(' часов');
+                break;
+            case 'минута' :
+                nameType.push(' минута');
+                nameType.push(' минуты');
+                nameType.push(' минут');
+                break;
+            case 'секунда' :
+                nameType.push(' секунда');
+                nameType.push(' секунды');
+                nameType.push(' секунд');
+        }
+
+        if (+number === 1 || (+number > 19 && +number[1] === 1)) {
+            return number + nameType[0];
+        } else if ((+number >= 2 && +number <= 4) || (+number >= 22 && +number <= 24) || (+number[1] >= 2 && +number[1] <= 4)) {
+            return number + nameType[1];
         } else {
-            document.write(week[item]+"<br>");
+            return number + nameType[2];
         }
     }
+},1000);
 
-}
+
