@@ -1,5 +1,7 @@
 'use strict';
 
+let time1 = document.querySelector('#time1');
+
 setInterval(function () {
     let day = new Date();
     const options = {
@@ -32,7 +34,7 @@ setInterval(function () {
 
     newTimeString = 'Сегодня ' + arrDay.join(' ');
 
-    console.log(newTimeString);
+    time1.innerHTML = newTimeString;
 
     function changeDeclension(number, type) {
         let nameType = [];

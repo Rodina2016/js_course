@@ -1,4 +1,7 @@
 'use strict';
+
+let time2 = document.querySelector('#time2');
+
 (function(){
     setInterval(function () {
         let day = new Date();
@@ -16,7 +19,7 @@
         let stringDay = day.toLocaleDateString("ru", options).split(',');
         let newTimeString = addZero(stringDay[0], '.') + ' -' + addZero(stringDay[1], ':');
 
-        console.log(newTimeString);
+        time2.innerHTML = newTimeString;
 
         function addZero(string, delimiter) {
             let splitString = string.split(delimiter);
