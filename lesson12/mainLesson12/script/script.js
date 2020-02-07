@@ -86,15 +86,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
             appData.budget = +salaryAmount.value;
-            appData.getExpenses();
-            appData.getIncome();
-            appData.getAddIncome();
-            appData.getExpensesMonth();
-            appData.getAddExpenses();
-            appData.getIncomeMonth();
-            appData.getBudget();
-            appData.getTargetMonth();
-            appData.showResult();
+            this.getExpenses();
+            this.getIncome();
+            this.getAddIncome();
+            this.getExpensesMonth();
+            this.getAddExpenses();
+            this.getIncomeMonth();
+            this.getBudget();
+            this.getTargetMonth();
+            this.showResult();
         },
         showResult: function() {
             budgetMonthValue.value = this.budgetMonth;
