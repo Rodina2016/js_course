@@ -45,16 +45,16 @@ document.addEventListener('DOMContentLoaded', function () {
             appData.budget = +salaryAmount.value;
             appData.getExpenses();
             appData.getIncome();
+            appData.getAddIncome();
             appData.getExpensesMonth();
             appData.getAddExpenses();
-            appData.getAddIncome();
+            appData.getIncomeMonth();
             appData.getBudget();
             appData.getTargetMonth();
-            appData.getIncomeMonth();
             appData.showResult();
         },
         showResult: function() {
-            budgetMonthValue.value = appData.budgetMonth + appData.incomeMonth;
+            budgetMonthValue.value = appData.budgetMonth;
             budgetDayValue.value = appData.budgetDay;
             expensesMonthValue.value = appData.expensesMonth;
             additionalExpensesValue.value = appData.addExpenses.join(', ');
@@ -85,18 +85,15 @@ document.addEventListener('DOMContentLoaded', function () {
             expensesItems.forEach(function (item) {
                 let itemExpenses = item.querySelector('.expenses-title').value;
                 let cashExpenses = item.querySelector('.expenses-amount').value;
-                console.log(itemExpenses, cashExpenses);
                 if(itemExpenses !== '' && cashExpenses !== '') {
                     appData.expenses[itemExpenses] = cashExpenses;
                 }
-                console.log('expenses',appData.expenses);
             });
         },
         getIncome: function () {
             incomeItems.forEach(function (item) {
                 let itemIncome = item.querySelector('.income-title').value;
                 let cashIncome = item.querySelector('.income-amount').value;
-                console.log(itemIncome, cashIncome);
                 if(itemIncome !== '' && cashIncome !== '') {
                     appData.income[itemIncome] = +cashIncome;
                 }
@@ -105,24 +102,20 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         getAddExpenses: function () {
             let addExpenses = additionalExpensesItem.value.split(',');
-            console.log(addExpenses);
             addExpenses.forEach(function (item) {
                 item = item.trim();
                 if(item !== '') {
                     appData.addExpenses.push(item);
                 }
             });
-            console.log(appData.addExpenses);
         },
         getAddIncome: function() {
             additionalIncomeItem.forEach(function (item) {
                 let itemValue = item.value.trim();
-                console.log(itemValue);
                 if(itemValue !== '') {
                     appData.addIncome.push(itemValue);
                 }
             });
-            console.log(appData.addIncome);
         },
         getExpensesMonth: function() {
             let sum = 0;
@@ -140,10 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
             appData.incomeMonth = sum;
         },
         getBudget: function () {
-            console.log(appData.budget);
-            console.log(appData.incomeMonth);
-            console.log(appData.expensesMonth);
-            appData.budgetMonth = appData.budget + (+appData.incomeMonth) - (+appData.expensesMonth);
+            appData.budgetMonth = appData.budget + appData.incomeMonth - appData.expensesMonth;
             appData.budgetDay = Math.floor(appData.budgetMonth/30);
         },
         getTargetMonth: function () {
