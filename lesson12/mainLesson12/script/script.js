@@ -191,9 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
     };
 
-    start.addEventListener('click', function () {
-        appData.start.apply(appData);
-    });
+    start.addEventListener('click', appData.start.bind(appData));
     cancelBtn.addEventListener('click', function () {
         appData.reset();
     });
