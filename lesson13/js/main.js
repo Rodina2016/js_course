@@ -1,44 +1,43 @@
 document.addEventListener('DOMContentLoaded', function () {
    'use strict';
-   const toDoInput = document.querySelector('.header-input'),
-        toDoContainer = document.querySelector('#todo'),
-        todoItem = document.querySelector('.todo-item'),
-        todoButtons = document.querySelector('.todo-buttons'),
-        todoCompletedContainer = document.querySelector('#completed'),
-        add = document.querySelector('#add');
+    const toDoContainer = document.querySelector('#todo'),
+    todoItem = document.querySelector('.todo-item'),
+    todoButtons = document.querySelector('.todo-buttons'),
+    todoCompletedContainer = document.querySelector('#completed'),
+    add = document.querySelector('#add');
 
-        const allItems = document.querySelectorAll('.todo-item');
+    const allItems = document.querySelectorAll('.todo-item');
 
-        allItems[0].remove();
-        allItems[1].remove();
+    allItems[0].remove();
+    allItems[1].remove();
    
-   const toDoList = {
+    const toDoList = {
        list: [],
-       pushLocalStorage: function(value, state, id) {
-        const arr = this.getLocalStroge();
-        if(arr) {
-            arr.push({'id': id, 'title':value, 'done': state});
-            this.list = arr;
-        } else {
-            this.list.push({'id': id, 'title':value, 'done': false});
-        }
-
-        localStorage.setItem('listToDo', JSON.stringify(this.list));
-       },
-       removeLocalStorage: function(id) {
-         const arr = JSON.parse(localStorage.getItem("listToDo"));
-         arr.forEach(function(item, ind) {
-            if(item.id === +id) {
-                arr.splice(ind, 1);
+        pushLocalStorage: function(value, state, id) {
+            const arr = this.getLocalStroge();
+            if(arr) {
+                arr.push({'id': id, 'title':value, 'done': state});
+                this.list = arr;
+            } else {
+                this.list.push({'id': id, 'title':value, 'done': false});
             }
-         });
-         this.list = arr;
-         localStorage.setItem('listToDo', JSON.stringify(arr));
-       },
-       getLocalStroge: function() {
-        return JSON.parse(localStorage.getItem("listToDo"));
-       },
-       addToDo: function (value) {
+
+            localStorage.setItem('listToDo', JSON.stringify(this.list));
+        },
+        removeLocalStorage: function(id) {
+            const arr = JSON.parse(localStorage.getItem("listToDo"));
+            arr.forEach(function(item, ind) {
+                if(item.id === +id) {
+                    arr.splice(ind, 1);
+                }
+            });
+            this.list = arr;
+            localStorage.setItem('listToDo', JSON.stringify(arr));
+        },
+        getLocalStroge: function() {
+            return JSON.parse(localStorage.getItem("listToDo"));
+        },
+        addToDo: function (value) {
            const allTodoItem = document.querySelectorAll('.todo-item');
            const arr = this.getLocalStroge();
            let nextId = 0;
@@ -63,20 +62,20 @@ document.addEventListener('DOMContentLoaded', function () {
            }
     
        },
-       removeToDo: function (elem) {
+        removeToDo: function (elem) {
            elem.remove();
-       },
-       setStateLocalStorage: function(id, newState) {
-        const arr = this.getLocalStroge();
-        arr.forEach(function(item, ind) {
-            if(item.id === +id) {
-                item.done = newState;
-            }
-         });
-         this.list = arr;
-         localStorage.setItem('listToDo', JSON.stringify(arr));
-       },
-       buildListToDo: function() {
+        },
+        setStateLocalStorage: function(id, newState) {
+            const arr = this.getLocalStroge();
+            arr.forEach(function(item, ind) {
+                if(item.id === +id) {
+                    item.done = newState;
+                }
+            });
+            this.list = arr;
+            localStorage.setItem('listToDo', JSON.stringify(arr));
+        },
+        buildListToDo: function() {
             const buildArr = this.getLocalStroge();
             if(buildArr) {
                 buildArr.forEach(function(item) {
@@ -94,11 +93,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
             }
-       },
-   }
-
-
-
+        },
+    }
 
     add.addEventListener('click', function (event) {
         event.preventDefault();
@@ -107,10 +103,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.addEventListener('click', function(event){
-    const classElem = event.target.className;
+        const classElem = event.target.className;
+
         if(classElem === 'todo-remove') {
             const currentId = event.target.parentElement.parentElement.getAttribute('id');
             const currentElem = event.target.parentElement.parentElement;
+
             toDoList.removeToDo(currentElem);
             toDoList.removeLocalStorage(currentId);
         }
@@ -120,6 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if(classElem === 'todo-complete' &&  container.getAttribute('id') === 'todo') {
             const currentElem = event.target.parentElement.parentElement;
             const currentId = currentElem.getAttribute('id');
+
             todoCompletedContainer.appendChild(currentElem);
             toDoList.setStateLocalStorage(currentId, true);
         } 
@@ -127,6 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if(classElem === 'todo-complete' &&  container.getAttribute('id') === 'completed') {
             const currentElem = event.target.parentElement.parentElement;
             const currentId = currentElem.getAttribute('id');
+
             toDoContainer.appendChild(currentElem);
             toDoList.setStateLocalStorage(currentId, false);
         }   
@@ -134,5 +134,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     toDoList.buildListToDo();
-    console.log(toDoList.getLocalStroge());
 });
