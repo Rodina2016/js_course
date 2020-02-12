@@ -100,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         const inputValue = this.parentElement.querySelector('.header-input').value;
         toDoList.addToDo(inputValue);
+        this.parentElement.querySelector('.header-input').value = '';
     });
 
     document.addEventListener('click', function(event){
