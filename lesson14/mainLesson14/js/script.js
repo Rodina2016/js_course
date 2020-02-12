@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function(){
          this.bg = bg;
          this.fontsize = fontsize,
          this.text = text;
-    }
+    };
 
     DomElement.prototype.makeElement = function () {
         const firstElem = this.selector[0];
@@ -19,14 +19,11 @@ document.addEventListener('DOMContentLoaded', function(){
             elem = document.createElement('div');
             elem.classList.add(this.selector.substring(1));
         }
-
-        elem.style.height = this.height + 'px';
-        elem.style.width = this.width + 'px';
-        elem.style.background = this.bg;
-        elem.style.fontsize = this.fontsize + 'px';
+        const styleStr = `height:${this.height}px; width:${this.width}px; background:${this.bg}; font-size:${this.fontsize}px;`;
+        elem.style.cssText = styleStr;
         elem.innerHTML = this.text;
         return elem;
-    }
+    };
 
     const newElem = new DomElement('.id', '78', '150', 'green', '20', 'Hello!');
 
