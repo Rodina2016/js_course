@@ -16,8 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const targetMonthValue = valueList[6];
     const salaryAmount = document.querySelector('.salary-amount');
     const additionalIncomeItem = document.querySelectorAll('.additional_income-item');
-    let expensesItems = document.querySelectorAll('.expenses-items');
-    let incomeItems = document.querySelectorAll('.income-items');
     const additionalExpensesItem = document.querySelector('.additional_expenses-item');
     const targetAmount = document.querySelector('.target-amount');
     const periodSelect = document.querySelector('.period-select');
@@ -150,7 +148,6 @@ document.addEventListener('DOMContentLoaded', function () {
                arr.forEach(function (item) {
                    const itemValue = item.trim();
                    if (itemValue !== '') {
-                       console.log(_this[type]);
                        _this[type].push(itemValue);
                    }
                });
@@ -173,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.expensesMonth = sum;
         };
 
-        getIncomeMonth = function () {
+        getIncomeMonth () {
             let sum = 0;
             for (let item in this.income) {
                 sum += +this.income[item];
