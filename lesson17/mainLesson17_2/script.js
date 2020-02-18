@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const dateNY = new Date('1 january 2021').getTime();
     let counDayToNY = Math.floor((dateNY - dateNow) / 1000 / 86400);
 
-    if(currentHours > 0 && currentHours < 5) {
+    if(currentHours >= 0 && currentHours < 5) {
         strHello = 'Доброй ночи';
     } else if(currentHours >= 5 && currentHours <= 12) {
         strHello = 'Доброе утро';
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         strHello = 'Добрый вечер';
     }
-
+    console.log(currentHours);
     const days = {
         '1' : 'Понедельник',
         '2' : 'Вторник',
