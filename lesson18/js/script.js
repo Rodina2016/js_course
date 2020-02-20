@@ -73,7 +73,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 targetBlock.scrollIntoView({
                     behavior: 'smooth',
                 });
-
             });
         });
 
@@ -121,8 +120,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     togglePopup();
-
-    //
 
 
 })
