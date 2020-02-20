@@ -88,10 +88,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const togglePopup = () => {
         const popup = document.querySelector('.popup');
+        const popupContent = document.querySelector('.popup-content');
         const popupBtn = document.querySelectorAll('.popup-btn');
         const popupClose = document.querySelector('.popup-close');
         const winWidth = document.documentElement.clientWidth;
-        popup.style.transform = `translate(-100%)`;
+        popupContent.style.transform = `translate(-300%)`;
 
         popupBtn.forEach((elem) => {
             elem.addEventListener('click', () => {
@@ -100,16 +101,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 if(winWidth > 768) {
                     animate(time);
                 } else {
-                    popup.style.transform = `translate(0%)`;
+                    popupContent.style.transform = `translate(0%)`;
                 }
             });
         });
 
         const animate = (time) => {
             const id = setInterval(() => {
-                popup.style.transform = `translate(${-100 + time}%)`;
-                time = time + 0.5;
-                if(time <= 100) {
+                popupContent.style.transform = `translate(${-300 + time}%)`;
+                time = time + 2;
+                if(time <= 300) {
                     animate();
                 } else {
                     clearInterval(id);
@@ -119,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         popupClose.addEventListener('click', () => {
             popup.style.display = 'none';
-            popup.style.transform = `translate(-100%)`;
+            popupContent.style.transform = `translate(-300%)`;
         });
     }
 
