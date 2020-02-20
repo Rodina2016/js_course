@@ -64,15 +64,19 @@ document.addEventListener('DOMContentLoaded', function () {
         closeBtn.addEventListener('click', handlerMenu);
         menuItems.forEach((item) => {
             item.addEventListener('click', handlerMenu);
+        });
 
-            const linkItem = item.querySelector('a');
-            linkItem.addEventListener('click', (e) => {
-                e.preventDefault();
-                const href = linkItem.getAttribute('href');
-                const targetBlock = document.querySelector(`${href}`);
-                targetBlock.scrollIntoView({
-                    behavior: 'smooth',
-                });
+        const linkItem = document.querySelectorAll('a');
+        linkItem.forEach((item) => {
+            item.addEventListener('click', (e) => {
+                const href = item.getAttribute('href');
+                if(href[0] === '#' && href.length > 1) {
+                    e.preventDefault()
+                    const targetBlock = document.querySelector(`${href}`);
+                    targetBlock.scrollIntoView({
+                        behavior: 'smooth',
+                    });
+                }
             });
         });
 
