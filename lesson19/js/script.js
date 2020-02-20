@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const toggleMenu = () => {
         const btnMenu = document.querySelector('.menu'),
             menu = document.querySelector('menu'),
+            main = document.querySelector('main'),
             closeBtn = document.querySelector('.close-btn'),
             menuItems = menu.querySelectorAll('ul li');
 
@@ -78,56 +79,57 @@ document.addEventListener('DOMContentLoaded', function () {
             if(target.classList.contains('close-btn') || target.getAttribute('href')) handlerMenu();
             if(target.getAttribute('href')) scrollToSection(target);
         });
+
+        //клик на кнопку вниз на баннере
+        main.addEventListener('click', (event) => {
+            if(event.target.closest('a') && event.target.closest('a').getAttribute('href')) {
+                let target = event.target.closest('a');
+                scrollToSection(target);
+            }
+    });
     }
 
     toggleMenu();
+
 
     //Popup
 
     const togglePopup = () => {
         const popup = document.querySelector('.popup');
+        const popupContent = document.querySelector('.popup-content');
         const popupBtn = document.querySelectorAll('.popup-btn');
+        const popupClose = document.querySelector('.popup-close');
         const winWidth = document.documentElement.clientWidth;
-        popup.style.transform = `translate(-100%)`;
+        popupContent.style.transform = `translate(-300%)`;
 
         popupBtn.forEach((elem) => {
             elem.addEventListener('click', () => {
                 let time = 0;
-                popup.style.display = 'block';
-                if(winWidth > 768) {
-                    animate(time);
-                } else {
-                    popup.style.transform = `translate(0%)`;
-                }
-            });
-        });
-
-        popup.addEventListener('click',  (event) => {
-            let target = event.target;
-            if(target.classList.contains('popup-close')) {
-                popup.style.display = 'none';
-                popup.style.transform = `translate(-100%)`;
-            } else {
-                target = target.closest('.popup-content');
-                if(!target) {
-                    popup.style.display = 'none';
-                    popup.style.transform = `translate(-100%)`;
-                }
-            }
-
-        })
+        popup.style.display = 'block';
+        if(winWidth > 768) {
+            animate(time);
+        } else {
+            popupContent.style.transform = `translate(0%)`;
+        }
+    });
+    });
 
         const animate = (time) => {
             const id = setInterval(() => {
-                popup.style.transform = `translate(${-100 + time}%)`;
-                time = time + 0.5;
-                if(time <= 100) {
-                    animate();
-                } else {
-                    clearInterval(id);
-                }
-            });
+                popupContent.style.transform = `translate(${-300 + time}%)`;
+            time = time + 2;
+            if(time <= 300) {
+                animate();
+            } else {
+                clearInterval(id);
+            }
+        });
         };
+
+        popupClose.addEventListener('click', () => {
+            popup.style.display = 'none';
+        popupContent.style.transform = `translate(-300%)`;
+    });
     }
 
     togglePopup();
