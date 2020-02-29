@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const idInterval = setInterval(updateClock, 1000);
     }
 
-    countTimer('20 february 2020');
+    countTimer('2 march 2020');
 
 
     //Меню
@@ -314,5 +314,154 @@ document.addEventListener('DOMContentLoaded', function () {
 
     validateCalc();
 
+    //calculation
+
+    const calc = (price = 100) => {
+        const calcBlock = document.querySelector('.calc-block'),
+            calcType = document.querySelector('.calc-type'),
+            calcSquare = document.querySelector('.calc-square'),
+            calcDay = document.querySelector('.calc-day'),
+            calcCount = document.querySelector('.calc-count'),
+            totalValue = document.getElementById('total');
+
+        const countSum = () => {
+            let total = 0;
+            let countValue = 1;
+            let dayValue = 1;
+            const typeValue = calcType.options[calcType.selectedIndex].value;
+            let squareValue = +calcSquare.value;
+
+            if(calcCount.value > 1) {
+                countValue += (calcCount.value - 1) / 10;
+            }
+
+            if(calcDay.value && calcDay.value < 5) {
+                dayValue *= 2;
+            } else if(calcDay.value && calcDay.value < 10) {
+                dayValue *= 1.5;
+            }
+
+            if(typeValue && squareValue) {
+                total = price * typeValue * squareValue * countValue * dayValue;
+            }
+            animateTotal(total);
+        }
+
+        const animateTotal = (total) => {
+            for(let i = 0; i <= total; i++) {
+                setTimeout(function () {
+                    totalValue.textContent = i;
+                },1000);
+            }
+        }
+
+        calcBlock.addEventListener('change', (event) => {
+            const target = event.target;
+
+            if(target.matches('.calc-type') || target.matches('.calc-square') ||
+                target.matches('.calc-day') || target.matches('.calc-count')) {
+                countSum();
+            }
+        });
+    };
+
+    calc(100);
+
+    //send-ajax-form
+
+    const sendForm = (form, style) => {
+        const errorMessage = 'Что-то пошло не так...',
+            loadMessage = 'Загрузка...',
+            successMessage = 'Спасибо, мы скоро свяжемся с вами!';
+
+        const statusMessage = document.createElement('div');
+        statusMessage.style.cssText = style;
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if(isValid(form) > 0) {
+                return;
+            }
+
+            form.appendChild(statusMessage);
+            statusMessage.textContent = loadMessage;
+            const formData = new FormData(form);
+            let body = {};
+            formData.forEach((val, key) => {
+                body[key] = val;
+            });
+            postData(body, () => {
+                statusMessage.textContent = successMessage;
+                clearForm(form);
+            },  (error) => {
+                statusMessage.textContent = errorMessage;
+                console.error(error);
+            });
+        });
+
+        const clearForm = (form) => {
+            let allInputs =  form.querySelectorAll('input');
+            allInputs = [...allInputs];
+            allInputs = allInputs.filter((item) => {
+                return item.getAttribute('type') !== 'submit';
+            });
+
+            allInputs.forEach(item => {
+                item.value = '';
+            })
+        }
+
+        const postData = (body, outputData, errorData) => {
+            const request = new XMLHttpRequest();
+            request.addEventListener('readystatechange', () => {
+
+                if (request.readyState !== 4) {
+                    return;
+                }
+                if (request.status === 200) {
+                    outputData();
+                } else {
+                    errorData(request.status);
+                }
+            });
+            request.open('POST', './server.php');
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.send(JSON.stringify(body));
+        }
+
+        const isValid = (form) =>{
+            let errorsCount = 0;
+            const patterTel = /^\+?[78]([-()]*\d){10,}$/;
+            const patternText = /^[а-яА-ЯёЁ\s]+$/;
+            const tel = form.querySelector('[type=tel]');
+            const name = form.querySelector('[name=user_name]');
+            const message = form.querySelector('[name=user_message]');
+
+            const validInput = (elem, pattern) => {
+                const elemValue = elem.value;
+                if(!pattern.test(elemValue)) {
+                    elem.style.cssText = 'border: 1px solid red';
+                    errorsCount++;
+                } else {
+                    elem.style.cssText = '';
+                }
+            }
+
+            if(tel) validInput(tel, patterTel);
+            if(name) validInput(name, patternText);
+            if(message) validInput(message, patternText);
+
+            return errorsCount;
+        }
+    }
+
+
+    const formBanner = document.getElementById('form1');
+    const formModal = document.getElementById('form3');
+    const formBottom = document.getElementById('form2');
+
+    sendForm(formBanner, 'font-size: 2rem');
+    sendForm(formModal, 'color: white; font-size: 2rem');
+    sendForm(formBottom, 'color: white; font-size: 2rem');
 
 })

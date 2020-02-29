@@ -366,4 +366,20 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     calc(100);
+
+    //send-ajax-form
+
+    const sendForm = () => {
+        const errorMessage = 'Что-то пошло не так...',
+            loadMessage = 'Загрузка...',
+            successMessage = 'Спасибо, мы скоро свяжемся с вами!';
+        const form = document.getElementById('form1');
+
+        const statusMessage = document.createElement('div');
+        statusMessage.textContent = 'Тут сообщение';
+        console.log(statusMessage);
+        form.appendChild(statusMessage);
+    }
+
+    sendForm();
 })
