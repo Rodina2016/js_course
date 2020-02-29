@@ -371,8 +371,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const sendForm = (form, style) => {
         const errorMessage = 'Что-то пошло не так...',
-            loadMessage = 'Загрузка...',
             successMessage = 'Спасибо, мы скоро свяжемся с вами!';
+        const loadMessage = document.createElement('img');
+        loadMessage.setAttribute('src', 'images/load.gif');
+        loadMessage.style.cssText = 'width:30px;'
 
         const statusMessage = document.createElement('div');
         statusMessage.style.cssText = style;
@@ -384,7 +386,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             form.appendChild(statusMessage);
-            statusMessage.textContent = loadMessage;
+            statusMessage.appendChild(loadMessage);
             const formData = new FormData(form);
             let body = {};
             formData.forEach((val, key) => {
