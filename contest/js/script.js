@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
         heroesBlock = document.getElementById('heroes'),
         preloader = document.getElementById('preloader'),
         filterBlock = document.getElementById('filter');
-        cloneItem = heroesItem.cloneNode(true);
+    cloneItem = heroesItem.cloneNode(true);
 
     let responseData = {};
 
@@ -20,8 +20,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if(request.status === 200) {
                 responseData = eval(request.responseText);
+                deleteSpace(responseData);
                 showData(responseData);
                 showFilter(getAllFilms(responseData));
+            }
+        });
+    }
+
+    deleteSpace = (data) => {
+        return data.map((elem) => {
+            if(elem.movies) {
+                elem.movies = elem.movies.map(item => {
+                    return item.trim();
+                })
             }
         });
     }
@@ -33,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 allFilmsArr = [...allFilmsArr, ...item.movies];
             }
         });
-        allFilmsArr = allFilmsArr.filter((item, index) => index === allFilmsArr.indexOf(item));
+        allFilmsArr = allFilmsArr.filter((item, index) => index === allFilmsArr.indexOf(item.trim()));
         return allFilmsArr;
     }
 
@@ -42,16 +53,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const filterItem = document.createElement('div');
             filterItem.classList.add('filter__item');
             filterItem.textContent = `#${item}`;
-            filterItem.setAttribute('data-name', item);
+            filterItem.setAttribute('data-name', item.trim());
             filterBlock.appendChild(filterItem);
         });
-       filterBlock.classList.add('show');
+        filterBlock.classList.add('show');
     }
 
     showData = (data) => {
         if(document.querySelector('.row')) {
             document.querySelector('.row').remove();
         }
+
         const row = document.createElement('div');
         row.classList.add('row');
         data.forEach(item => {
@@ -72,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if(item.movies) {
                 item.movies.forEach(film => {
                     const cloneFilm = filmsItemClone.cloneNode();
-                    cloneFilm.textContent = film;
+                    cloneFilm.textContent = film.trim();
                     filmList.appendChild(cloneFilm);
                 });
             } else {
@@ -85,13 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const filterCards = (data, filter) => {
-        if(filter === 'all') {
-            return data;
-        }
-        data = data.filter((item, index) => {
-            if(item.movies) {
-                return item.movies.indexOf(filter) !==-1;
-            }
+        if(filter === 'all') return data;
+        data = data.filter((item) => {
+            if(item.movies) return item.movies.indexOf(filter) !== -1;
         });
         return data;
     }
@@ -103,8 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = event.target;
         if(target.matches('.filter__item')) {
             target.classList.add('active');
-           const film = target.dataset.name;
-           newData = filterCards(responseData, film);
+            const film = target.dataset.name;
+            newData = filterCards(responseData, film);
         }
         showData(newData);
     })
