@@ -118,3 +118,31 @@ img {
     border-radius: 50%;
     background-color: #FFAD00;
 }
+
+.filter {
+    display: none;
+    flex-wrap: wrap;
+}
+
+.filter.show {
+    display: flex;
+}
+
+.filter__item {
+    margin-right: 16px;
+    margin-bottom: 16px;
+    padding: 4px 8px;
+    font-size: 14px;
+    background-color: #A07EFF;
+    color: white;
+    cursor: pointer;
+}
+
+.filter__item.active {
+    background-color: #7D4FFF;
+}
+
+.filter__item:hover {
+    background-color: #7D4FFF;
+    transition: .5s ease;
+}

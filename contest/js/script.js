@@ -2,7 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroesItem = document.querySelector('.heroes__item'),
         heroesBlock = document.getElementById('heroes'),
         preloader = document.getElementById('preloader'),
+        filterBlock = document.getElementById('filter');
         cloneItem = heroesItem.cloneNode(true);
+
+    let responseData = {};
 
     heroesItem.remove();
 
@@ -12,18 +15,44 @@ document.addEventListener('DOMContentLoaded', () => {
         request.send(null);
 
         request.addEventListener('readystatechange', () => {
-            console.log(request.readyState);
             if (request.readyState !== 4) {
                 return;
             }
             if(request.status === 200) {
-                const responseData = eval(request.responseText);
+                responseData = eval(request.responseText);
                 showData(responseData);
+                showFilter(getAllFilms(responseData));
             }
         });
     }
 
+    getAllFilms = (data) => {
+        let allFilmsArr = [];
+        data.forEach(item => {
+            if(item.movies) {
+                allFilmsArr = [...allFilmsArr, ...item.movies];
+            }
+        });
+        allFilmsArr = allFilmsArr.filter((item, index) => index === allFilmsArr.indexOf(item));
+        return allFilmsArr;
+    }
+
+    showFilter = (data) => {
+        data.forEach(item => {
+            const filterItem = document.createElement('div');
+            filterItem.classList.add('filter__item');
+            filterItem.textContent = `#${item}`;
+            filterItem.setAttribute('data-name', item);
+            filterBlock.appendChild(filterItem);
+        });
+       filterBlock.classList.add('show');
+    }
+
     showData = (data) => {
+        if(document.querySelector('.row')) {
+            document.querySelector('.row').remove();
+        }
+        console.log(data);
         const row = document.createElement('div');
         row.classList.add('row');
         data.forEach(item => {
@@ -55,6 +84,31 @@ document.addEventListener('DOMContentLoaded', () => {
         preloader.remove();
         heroesBlock.appendChild(row);
     };
+
+    const filterCards = (data, filter) => {
+        if(filter === 'all') {
+            return data;
+        }
+        data = data.filter((item, index) => {
+            if(item.movies) {
+                return item.movies.indexOf(filter) !==-1;
+            }
+        });
+        return data;
+    }
+
+    filterBlock.addEventListener('click', (event) => {
+        const allFilters = filterBlock.querySelectorAll('.filter__item');
+        allFilters.forEach(item => item.classList.remove('active'));
+        let newData = {};
+        const target = event.target;
+        if(target.matches('.filter__item')) {
+            target.classList.add('active');
+           const film = target.dataset.name;
+           newData = filterCards(responseData, film);
+        }
+        showData(newData);
+    })
 
     getData();
 })
