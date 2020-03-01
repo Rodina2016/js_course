@@ -457,13 +457,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-
-    const formBanner = document.getElementById('form1');
-    const formModal = document.getElementById('form3');
-    const formBottom = document.getElementById('form2');
-
-    sendForm(formBanner, 'font-size: 2rem');
-    sendForm(formModal, 'color: white; font-size: 2rem');
-    sendForm(formBottom, 'color: white; font-size: 2rem');
+    const allForms = document.querySelectorAll('form');
+    allForms.forEach(item => {
+        sendForm(item, 'color: white; font-size: 2rem')
+    });
 
 })
