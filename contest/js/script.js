@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if(document.querySelector('.row')) {
             document.querySelector('.row').remove();
         }
-        console.log(data);
         const row = document.createElement('div');
         row.classList.add('row');
         data.forEach(item => {
