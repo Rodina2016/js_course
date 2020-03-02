@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
         heroesBlock = document.getElementById('heroes'),
         preloader = document.getElementById('preloader'),
         filterBlock = document.getElementById('filter');
-    cloneItem = heroesItem.cloneNode(true);
+        cloneItem = heroesItem.cloneNode(true);
 
     let responseData = {};
 
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
             filterItem.setAttribute('data-name', item.trim());
             filterBlock.appendChild(filterItem);
         });
-        filterBlock.classList.add('show');
+       filterBlock.classList.add('show');
     }
 
     showData = (data) => {
@@ -105,16 +105,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     filterBlock.addEventListener('click', (event) => {
-        const allFilters = filterBlock.querySelectorAll('.filter__item');
-        allFilters.forEach(item => item.classList.remove('active'));
-        let newData = {};
-        const target = event.target;
-        if(target.matches('.filter__item')) {
-            target.classList.add('active');
-            const film = target.dataset.name;
-            newData = filterCards(responseData, film);
+        if(event.target.matches('.filter__item')) {
+            const allFilters = filterBlock.querySelectorAll('.filter__item');
+            allFilters.forEach(item => item.classList.remove('active'));
+            let newData = {};
+            const target = event.target;
+            if(target.matches('.filter__item')) {
+                target.classList.add('active');
+                const film = target.dataset.name;
+                newData = filterCards(responseData, film);
+            }
+            showData(newData);
         }
-        showData(newData);
     })
 
     getData();
