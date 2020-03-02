@@ -75,7 +75,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 cloneElem.querySelector('.heroes__item-status').classList.add('heroes__item-status--alive');
             }
             cloneElem.querySelector('.heroes__actor-name').textContent = item.actors;
-            cloneElem.querySelector('.heroes__item-img').setAttribute('src', item.photo);
+            const img = fetch(item.photo);
+            img.then(response => {
+                if(response.ok) {
+                    cloneElem.querySelector('.heroes__item-img').setAttribute('src', item.photo);
+                } else {
+                    cloneElem.querySelector('.heroes__item-img').setAttribute('src', 'images/default.jpg');
+                }
+            });
 
             /*films*/
             const filmList = cloneElem.querySelector('.heroes__films-list');
