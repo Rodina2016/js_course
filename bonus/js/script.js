@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const parseData = (data, selector, countCountry) => {
-        console.log(data);
         let dropdownCols = document.querySelector(`.dropdown-lists__list--${selector}`);
         dropdownCols = dropdownCols.querySelector('.dropdown-lists__col');
         dropdownCols.innerHTML = '';
@@ -57,10 +56,46 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
 
+    const parseAutocomplete = (data) => {
+        let dropdownCols = document.querySelector('.dropdown-lists__list--autocomplete');
+        dropdownCols = dropdownCols.querySelector('.dropdown-lists__col');
+        dropdownCols.innerHTML = '';
+        data.forEach(item => {
+            const countryBlock = document.createElement('div');
+            countryBlock.classList.add('dropdown-lists__countryBlock');
+
+            const line =
+                `<div class="dropdown-lists__line" data-link="${item.link}">
+                <div class="dropdown-lists__city">${item.name}</div>
+                <div class="dropdown-lists__count">${item.count}</div>
+             </div>`;
+
+            countryBlock.insertAdjacentHTML('beforeend', line);
+            dropdownCols.insertAdjacentElement('beforeend', countryBlock);
+        });
+
+    }
 
     selectCities.addEventListener('focus', (event) =>{
         defaultList.style.cssText = 'display: block';
         selectList.style.cssText = 'display: none';
+    });
+
+    selectCities.addEventListener('input', (event) => {
+        const value = event.target.value;
+        let newArr = [];
+        responseData.RU.forEach(item => {
+            const pattern = new RegExp('^' + value,'i');
+            item.cities.forEach(elem => {
+                if(elem.name.match(pattern)) {
+                    newArr.push(elem);
+                }
+            });
+        });
+        parseAutocomplete(newArr);
+        defaultList.style.cssText = 'display: none';
+        selectList.style.cssText = 'display: none';
+        autocompleteList.style.cssText = 'display: block';
     });
 
     document.addEventListener('click', (event) => {
@@ -79,11 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
             parseData(data, 'select', false);
             defaultList.style.cssText = 'display: none';
             selectList.style.cssText = 'display: block';
+            autocompleteList.style.cssText = 'display: none';
         }
 
         if(target.closest('.dropdown-lists__list--select') && target.closest('.dropdown-lists__total-line')) {
             defaultList.style.cssText = 'display: block';
             selectList.style.cssText = 'display: none';
+            autocompleteList.style.cssText = 'display: none';
         }
     });
 
