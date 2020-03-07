@@ -3,12 +3,15 @@ document.addEventListener('DOMContentLoaded', () => {
         defaultList = document.querySelector('.dropdown-lists__list--default'),
         selectList = document.querySelector('.dropdown-lists__list--select'),
         autocompleteList = document.querySelector('.dropdown-lists__list--autocomplete'),
-        dropdownCols = document.querySelectorAll('.dropdown-lists__col'),
+        label = document.querySelector('label'),
+        closeButton = document.querySelector('.close-button'),
+        button = document.querySelector('.button'),
         url = './db_cities.json';
     let responseData = {};
 
+    button.removeAttribute('href');
 
-    const getCities = (url) => {
+    const getData = (url) => {
         const request = new XMLHttpRequest();
         request.open('GET', url);
         request.send(null);
@@ -17,11 +20,32 @@ document.addEventListener('DOMContentLoaded', () => {
             if (request.readyState !== 4) {
                 return;
             }
-            if(request.status === 200) {
+            if (request.status === 200) {
                 responseData = JSON.parse(request.response);
                 parseData(responseData.RU, 'default', 3);
             }
         });
+    }
+
+    const getCities = (value) => {
+        let newData = [];
+        responseData.RU.forEach(item => {
+            const pattern = new RegExp('^' + value, 'i');
+            item.cities.forEach(elem => {
+                if (elem.name.match(pattern)) {
+                    newData.push(elem);
+                }
+            });
+        });
+
+        if (!newData.length) {
+            newData.push({name: 'Ничего не найдено', count: ''});
+        }
+        parseAutocomplete(newData);
+        defaultList.style.cssText = 'display: none';
+        selectList.style.cssText = 'display: none';
+        autocompleteList.style.cssText = 'display: block';
+        label.style.cssText = 'display: none';
     }
 
     const parseData = (data, selector, countCountry) => {
@@ -39,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             countryBlock.insertAdjacentHTML('beforeend', totalLine);
 
             item.cities.forEach((city, ind) => {
-                if(countCountry) {
+                if (countCountry) {
                     if (ind >= countCountry) {
                         return;
                     }
@@ -76,33 +100,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-    selectCities.addEventListener('focus', (event) =>{
+    selectCities.addEventListener('focus', () => {
         defaultList.style.cssText = 'display: block';
         selectList.style.cssText = 'display: none';
+        autocompleteList.style.cssText = 'display: none';
     });
 
     selectCities.addEventListener('input', (event) => {
         const value = event.target.value;
-        let newArr = [];
-        responseData.RU.forEach(item => {
-            const pattern = new RegExp('^' + value,'i');
-            item.cities.forEach(elem => {
-                if(elem.name.match(pattern)) {
-                    newArr.push(elem);
-                }
-            });
-        });
-        parseAutocomplete(newArr);
-        defaultList.style.cssText = 'display: none';
-        selectList.style.cssText = 'display: none';
-        autocompleteList.style.cssText = 'display: block';
+        if (value !== '') {
+            getCities(value);
+        } else {
+            defaultList.style.cssText = 'display: block';
+            selectList.style.cssText = 'display: none';
+            autocompleteList.style.cssText = 'display: none';
+            label.style.cssText = 'display: block';
+        }
     });
 
     document.addEventListener('click', (event) => {
-        const target = event.target;
+        let target = event.target;
+
+        const completeInput = (target) => {
+            label.style.cssText = 'display: none';
+            selectCities.value = target.textContent;
+            closeButton.style.cssText = 'display: block';
+        }
 
         if (!event.target.closest('.input-cities')) {
             defaultList.style.cssText = 'display: none';
+            selectList.style.cssText = 'display: none';
+            autocompleteList.style.cssText = 'display: none';
         }
 
         if (target.closest('.dropdown-lists__list--default') && target.closest('.dropdown-lists__total-line')) {
@@ -117,13 +145,42 @@ document.addEventListener('DOMContentLoaded', () => {
             autocompleteList.style.cssText = 'display: none';
         }
 
-        if(target.closest('.dropdown-lists__list--select') && target.closest('.dropdown-lists__total-line')) {
+        if (target.closest('.dropdown-lists__list--select') && target.closest('.dropdown-lists__total-line')) {
             defaultList.style.cssText = 'display: block';
             selectList.style.cssText = 'display: none';
             autocompleteList.style.cssText = 'display: none';
         }
+
+        if (target.closest('.dropdown-lists__line')) {
+            target = target.closest('.dropdown-lists__line').querySelector('.dropdown-lists__city');
+            if (target.textContent !== 'Ничего не найдено') {
+                completeInput(target);
+            }
+            const href = target.closest('.dropdown-lists__line').getAttribute('data-link');
+            if (href !== 'undefined') {
+                button.setAttribute('href', href);
+            }
+
+        } else if (target.closest('.dropdown-lists__total-line')) {
+            completeInput(target.closest('.dropdown-lists__total-line').querySelector('.dropdown-lists__country'));
+            button.removeAttribute('href');
+        }
+
+        if (target.matches('.close-button')) {
+            selectCities.value = '';
+            closeButton.style.cssText = 'display: none';
+            defaultList.style.cssText = 'display: none';
+            selectList.style.cssText = 'display: none';
+            autocompleteList.style.cssText = 'display: none';
+            label.style.cssText = 'display: block';
+            button.removeAttribute('href');
+        }
     });
 
-    getCities(url);
+    const animateElem = (elem) {
+
+    }
+
+    getData(url);
 
 });
