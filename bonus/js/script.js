@@ -4,12 +4,35 @@ document.addEventListener('DOMContentLoaded', () => {
         selectList = document.querySelector('.dropdown-lists__list--select'),
         autocompleteList = document.querySelector('.dropdown-lists__list--autocomplete'),
         label = document.querySelector('label'),
-        closeButton = document.querySelector('.close-button'),
         button = document.querySelector('.button'),
+        main = document.querySelector('.main'),
+        inputCities = document.querySelector('.input-cities'),
+        spiner = document.querySelector('.spiner'),
         url = './db_cities.json';
+    let lang = 'RU';
     let responseData = {};
 
     button.removeAttribute('href');
+
+    const askLang = () => {
+        if(!getCookie('lang')) {
+            do {
+                lang = prompt('Укажите язык RU, EN или DE').toLocaleUpperCase();
+            } while (lang !== 'RU' && lang !== 'EN' && lang !== 'DE');
+
+            setCookie('lang', lang)
+        } else {
+            lang = getCookie('lang');
+        }
+    }
+
+    const setToLocalStorage = (data) => {
+        localStorage.setItem('data', JSON.stringify(data));
+    }
+
+    const getFromLocalStorage = () => {
+        return JSON.parse(localStorage.getItem('data'));
+    }
 
     const getData = (url) => {
         const request = new XMLHttpRequest();
@@ -18,18 +41,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         request.addEventListener('readystatechange', () => {
             if (request.readyState !== 4) {
+                inputCities.style.cssText = 'display: none';
                 return;
+            } else {
+                spiner.style.cssText = 'display: none';
+                inputCities.style.cssText = 'display: block';
             }
             if (request.status === 200) {
                 responseData = JSON.parse(request.response);
-                parseData(responseData.RU, 'default', 3);
+                setToLocalStorage(responseData);
+                parseData(responseData[lang], 'default', 3);
             }
         });
     }
 
     const getCities = (value) => {
         let newData = [];
-        responseData.RU.forEach(item => {
+
+        getFromLocalStorage()[lang].forEach(item => {
             const pattern = new RegExp('^' + value, 'i');
             item.cities.forEach(elem => {
                 if (elem.name.match(pattern)) {
@@ -100,10 +129,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
+    const animateleft = () => {
+        const idInterval = setInterval(() => {
+            let currentPos = +selectList.style.left.slice(0, -1);
+            if (currentPos <= -33) {
+                clearInterval(idInterval); // закончить анимацию через 2 секунды
+                return;
+            }
+            selectList.style.cssText = `display: block; left: ${currentPos - 1}%`;
+            defaultList.style.cssText = `display: block; left: ${currentPos - 1}%`;
+        },20);
+    }
+
+    const animateRight = () => {
+        const idInterval = setInterval(() => {
+            let currentPos = +selectList.style.left.slice(0, -1);
+            if (currentPos >= 0) {
+                clearInterval(idInterval); // закончить анимацию через 2 секунды
+                return;
+            }
+            selectList.style.cssText = `display: block; left: ${currentPos + 1}%`;
+            defaultList.style.cssText = `display: block; left: ${currentPos + 1}%`;
+        },20);
+    }
+
+    const getCookie = (name) => {
+        let matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+
+    const setCookie = (name, value, options = {}) => {
+
+        options = {
+            path: '/',
+            // при необходимости добавьте другие значения по умолчанию
+            ...options
+        };
+
+        if (options.expires instanceof Date) {
+            options.expires = options.expires.toUTCString();
+        }
+
+        let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+        for (let optionKey in options) {
+            updatedCookie += "; " + optionKey;
+            let optionValue = options[optionKey];
+            if (optionValue !== true) {
+                updatedCookie += "=" + optionValue;
+            }
+        }
+
+        document.cookie = updatedCookie;
+    }
+
     selectCities.addEventListener('focus', () => {
-        defaultList.style.cssText = 'display: block';
-        selectList.style.cssText = 'display: none';
-        autocompleteList.style.cssText = 'display: none';
+        if(!selectList.classList.contains('opened')) {
+            defaultList.style.cssText = 'display: block';
+            selectList.style.cssText = 'display: none';
+            autocompleteList.style.cssText = 'display: none';
+            selectList.classList.add('opened');
+        }
     });
 
     selectCities.addEventListener('input', (event) => {
@@ -124,31 +212,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const completeInput = (target) => {
             label.style.cssText = 'display: none';
             selectCities.value = target.textContent;
-            closeButton.style.cssText = 'display: block';
         }
 
         if (!event.target.closest('.input-cities')) {
             defaultList.style.cssText = 'display: none';
             selectList.style.cssText = 'display: none';
             autocompleteList.style.cssText = 'display: none';
+            selectList.classList.remove('opened');
         }
 
         if (target.closest('.dropdown-lists__list--default') && target.closest('.dropdown-lists__total-line')) {
             const dataValue = target.closest('.dropdown-lists__total-line').dataset.country;
-            let data = responseData.RU;
+            let data = getFromLocalStorage()[lang];
             data = data.filter((item) => {
                 return item.country === dataValue;
             });
             parseData(data, 'select', false);
-            defaultList.style.cssText = 'display: none';
-            selectList.style.cssText = 'display: block';
-            autocompleteList.style.cssText = 'display: none';
+            animateleft();
         }
 
         if (target.closest('.dropdown-lists__list--select') && target.closest('.dropdown-lists__total-line')) {
-            defaultList.style.cssText = 'display: block';
-            selectList.style.cssText = 'display: none';
-            autocompleteList.style.cssText = 'display: none';
+            animateRight();
         }
 
         if (target.closest('.dropdown-lists__line')) {
@@ -168,19 +252,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (target.matches('.close-button')) {
             selectCities.value = '';
-            closeButton.style.cssText = 'display: none';
-            defaultList.style.cssText = 'display: none';
-            selectList.style.cssText = 'display: none';
             autocompleteList.style.cssText = 'display: none';
             label.style.cssText = 'display: block';
             button.removeAttribute('href');
         }
     });
 
-    const animateElem = (elem) {
-
-    }
-
+    askLang();
     getData(url);
 
 });

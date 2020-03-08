@@ -20,9 +20,8 @@ body .main {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: flex-start;
+  flex-direction: column;
   background: #00416A;
   background: -webkit-gradient(linear, left top, left bottom, from(#00416A), to(#E4E5E6));
   background: linear-gradient(to bottom, #00416A, #E4E5E6);
@@ -118,18 +117,19 @@ body .main .input-cities label {
   width: 100%;
   background: #fff;
   max-height: 300px;
-  overflow: auto;
+  overflow-x: hidden;
 }
 
 .dropdown-lists {
-  width: 100%;
+  width: 300%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
 .dropdown-lists__list {
-  width: 100%;
+  position: relative;
+  width: 33%;
 }
 
 .dropdown-lists__list--default {
@@ -224,5 +224,9 @@ body .main .input-cities label {
   height: 100%;
   -webkit-transition: 0.4s;
   transition: 0.4s;
+}
+.spiner {
+  margin-top: 200px;
+  text-align: center;
 }
 /*# sourceMappingURL=style.css.map */
