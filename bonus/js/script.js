@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
         autocompleteList = document.querySelector('.dropdown-lists__list--autocomplete'),
         label = document.querySelector('label'),
         button = document.querySelector('.button'),
-        main = document.querySelector('.main'),
         inputCities = document.querySelector('.input-cities'),
         spiner = document.querySelector('.spiner'),
         url = './db_cities.json';
