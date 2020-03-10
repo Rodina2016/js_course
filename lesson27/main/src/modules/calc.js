@@ -29,7 +29,7 @@ const calc = (price = 100) => {
         if(typeValue && squareValue) {
             total = price * typeValue * squareValue * countValue * dayValue;
         }
-        animateTotal(total);
+        totalValue.textContent = total;
     }
 
     const animateTotal = (total) => {

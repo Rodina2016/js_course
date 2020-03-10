@@ -4,6 +4,9 @@ const sendForm = (form, style) => {
     const errorMessage = 'Что-то пошло не так...',
         successMessage = 'Спасибо, мы скоро свяжемся с вами!';
     const loadMessage = document.createElement('img');
+    const name = form.querySelector('[name=user_name]');
+    const message = form.querySelector('[name=user_message]');
+
     loadMessage.setAttribute('src', 'images/load.gif');
     loadMessage.style.cssText = 'width:30px;'
 
@@ -25,15 +28,20 @@ const sendForm = (form, style) => {
         });
         postData(body)
             .then((response) => {
-                console.log(response);
                 if(response.status !== 200) {
                     throw new Error('status network not 200');
                 }
                 statusMessage.textContent = successMessage;
+                setTimeout(() => {
+                    statusMessage.textContent = '';
+                }, 2000);
                 clearForm(form);
             })
             .catch((error) => {
                 statusMessage.textContent = errorMessage;
+                setTimeout(() => {
+                    statusMessage.textContent = '';
+                }, 2000);
                 console.error(error);
             });
     });
@@ -61,7 +69,7 @@ const sendForm = (form, style) => {
             });
     }
 
-    const isValid = (form) =>{
+    const isValid = (form) => {
         let errorsCount = 0;
         const patterTel = /^\+?[78]([-()]*\d){10,}$/;
         const patternText = /^[а-яА-ЯёЁ\s]+$/;
@@ -85,6 +93,15 @@ const sendForm = (form, style) => {
 
         return errorsCount;
     }
+
+    const textInputValid = (elem) => {
+        elem.addEventListener('input', () => {
+            elem.value = elem.value.replace(/[a-zA-Z]/g, '');
+        });
+    }
+
+    if(name) textInputValid(name);
+    if(message) textInputValid(message);
 }
 
 export default sendForm;

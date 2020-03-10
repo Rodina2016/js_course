@@ -15,9 +15,11 @@ const toggleMenu = () => {
         if (href[0] === '#' && href.length > 1) {
             event.preventDefault()
             const targetBlock = document.querySelector(`${href}`);
-            targetBlock.scrollIntoView({
-                behavior: 'smooth',
-            });
+            if(targetBlock) {
+                targetBlock.scrollIntoView({
+                    behavior: 'smooth',
+                });
+            }
         }
     }
 

@@ -5,7 +5,11 @@ const togglePopup = () => {
     const popupContent = document.querySelector('.popup-content');
     const popupBtn = document.querySelectorAll('.popup-btn');
     const popupClose = document.querySelector('.popup-close');
-    const winWidth = document.documentElement.clientWidth;
+    let winWidth = document.documentElement.clientWidth;
+    window.addEventListener('resize', () => {
+         winWidth = document.documentElement.clientWidth;
+    });
+
     popupContent.style.transform = `translate(-300%)`;
 
     popupBtn.forEach((elem) => {
@@ -17,6 +21,7 @@ const togglePopup = () => {
             } else {
                 popupContent.style.transform = `translate(0%)`;
             }
+
         });
     });
 
